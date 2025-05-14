@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Envio WhatsApp Automático</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    textarea, input, button { width: 100%; margin-top: 10px; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Enviar mensagens automáticas pelo WhatsApp</h2>
+
+  <label>Números (1 por linha - ex: 5585987654321)</label>
+  <textarea id="numeros" rows="10" placeholder="Digite os números aqui..."></textarea>
+
+  <label>Mensagem</label>
+  <textarea id="mensagem" rows="4" placeholder="Digite sua mensagem..."></textarea>
+
+  <label>Intervalo entre mensagens (em segundos)</label>
+  <input type="number" id="intervalo" value="5" min="1">
+
+  <button onclick="enviarMensagens()">Iniciar Envio</button>
+
+  <script>
+    async function enviarMensagens() {
+      const numeros = document.getElementById("numeros").value.trim().split("\n");
+      const mensagem = encodeURIComponent(document.getElementById("mensagem").value.trim());
+      const intervalo = parseInt(document.getElementById("intervalo").value) * 1000;
+
+      for (let i = 0; i < numeros.length; i++) {
+        const numero = numeros[i].replace(/\D/g, ''); // Remove letras e símbolos
+        if (numero) {
+          const url = `https://wa.me/${numero}?text=${mensagem}`;
+          window.open(url, '_blank');
+          await new Promise(resolve => setTimeout(resolve, intervalo));
+        }
+      }
+    }
+  </script>
+</body>
+</html>
